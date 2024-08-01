@@ -12,7 +12,11 @@ class ATCDataset(Dataset):
         Args:
             data_path (str): path to the data
         """
-        self.data = pd.read_csv(data_path)
+        self.data = pd.read_csv(
+            data_path,
+            delimiter=",",
+            header=0
+            )
 
     def __len__(self):
         return len(self.data)
