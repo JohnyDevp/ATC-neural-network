@@ -84,4 +84,5 @@ if __name__ == "__main__":
     grouped.columns = ['GroupDelivery', 'Vector']
 
     # Display the result
-    print(grouped.where(grouped['GroupDelivery'] == 11862489).dropna())
+    # print(grouped.where(grouped['GroupDelivery'] == 11862489).dropna())
+    print(grouped.iloc[0])
