@@ -75,4 +75,5 @@ class ATCDataset(Dataset):
         return len(self.vectors)
 
     def __getitem__(self, idx):
-        return self.groupDelivery.iloc[idx], self.vectors.iloc[idx], self.result_vector
+        gd = self.groupDelivery.iloc[idx]
+        return gd, self.vectors.iloc[idx], self.result_vector[int(gd)]
