@@ -36,3 +36,6 @@ pytorch.org  web stranka - inpirace
 
 
 
+
+
+
