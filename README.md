@@ -13,5 +13,12 @@ The goal of this project is prediction of quantity and type of package, where th
 jak postupovat pri ziskani dat , jejich trenovani a vyuziti natrenovane site.
 
 priprava datasetu. CSV nebo json. 
-1. z excel import csv ( autor Vandlik )
-vstupy (ATC_dataloader.py)- cisla boxu , rozmeny x,y,z  
+1. z excel import csv ( autor Vandlik HonzaNeuronkaKD.csv - data o produktech,, HOnzaNeuronkaObal.csv - typy obalu) 
+   - dalsi csv honzaneuronkzasilky, prijde zpakovany mailem.
+
+      csv soubory importovat jako tabulky do SQL.
+     na data v SQL pustit script.sql
+2. vstupy (ATC_dataloader.py)- cisla boxu , rozmeny x,y,z
+   
+vstupy z 1 , spojil do celku train_in.csv  , jak - 
+
