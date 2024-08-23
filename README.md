@@ -17,8 +17,22 @@ priprava datasetu. CSV nebo json.
    - dalsi csv honzaneuronkzasilky, prijde zpakovany mailem.
 
       csv soubory importovat jako tabulky do SQL.
-     na data v SQL pustit script.sql
-2. vstupy (ATC_dataloader.py)- cisla boxu , rozmeny x,y,z
+     na data v SQL pustit script.sql  - vytvari select , ktery ulozime do csv a mame soubory train_in.csv
+     z druhe casti vystupu scriptu ulozime soubor train_out.csv
+     test_in a _out , musi byt rozdilne data od train_in _out. 80% train a 20% test
+     
+2. ATC_dataloader.py - necte soubory train_in i train_out
+   transformuje csv soubory do vektoru s pevnym rozmerem 5000, kdyz chybi data doplni se nulama.
+   5000- maximalni pocet udaju o produktech na jedne objednavce.(groupdelivery = objednavka)
+
+   obdobne vytvoreny vektor - rozmer 18,  boxu ze souboru train_out
+dalo by se ulozit do file , nebo DB ,ale zustava jen v pameti.
    
-vstupy z 1 , spojil do celku train_in.csv  , jak - 
+atc_model.py - obsahuje customizaci predtrenovane NN.
+tento model urcuje jak uspesne se neuronka natrenuje. 
+
+nb.ipynb - zakladni py program,ktery vola jednotlive moduly. 
+pytorch.org  web stranka - inpirace
+
+
 
