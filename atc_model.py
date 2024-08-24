@@ -28,26 +28,4 @@ class BaseNN(nn.Module):
         x = self.fc5(x)
         return x
 
-class PredictionLoss(nn.Module):
-    """
-    This class is used to calculate the loss between two vectors
-    """
-    cos = nn.CosineSimilarity(dim=1, eps=1e-6)
-    mse = nn.MSELoss()
-    
-    def __init__(self):
-        super(PredictionLoss, self).__init__()
-    
-    def forward(self, pred, target):
-        # we are using the mean squared error as loss function
-        
-    # Define weights for functions for Cos and MSE.
-        w1 = 1
-        w2 = 10
-        
-        # Apply cumulative sum to both tensors and calculate loss.
-        cos_sim = torch.abs(self.cos(torch.cumsum(pred, dim=-1), torch.cumsum(target, dim=-1))).mean()
-        mse_loss = self.mse(torch.cumsum(pred, dim=-1), torch.cumsum(target, dim=-1))
-        loss = (w1 * mse_loss) / (w2 * cos_sim)
-        return loss
     

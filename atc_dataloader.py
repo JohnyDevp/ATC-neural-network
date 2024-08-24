@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import pandas as pd
 import numpy as np  
+import torch
 
 def create_vector(group, target_length=5000):
     """
@@ -76,4 +77,7 @@ class ATCDataset(Dataset):
 
     def __getitem__(self, idx):
         gd = self.groupDelivery.iloc[idx]
-        return gd, self.vectors.iloc[idx], self.result_vector[int(gd)]
+        # Ensure the vectors are returned as numpy arrays
+        input_vector = torch.tensor(self.vectors.iloc[idx], dtype=torch.float32)  # Convert input vector to tensor
+        output_vector = torch.tensor(self.result_vector[gd], dtype=torch.float32)  # Convert result vector to tensor
+        return gd, input_vector, output_vector
