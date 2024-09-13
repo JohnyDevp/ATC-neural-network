@@ -20,5 +20,5 @@ select Z.GroupDelivery, Z.Product, K.X, K.Y, K.Z, K.Weight, Z.Qty from Zasilky Z
 
 -- this command get all OUTPUT DATA (meaning data for training for computing loss function) until the groupdelivery number 
 select distinct Z.Expedition, Z.UsedCarton, Z.GroupDelivery from Zasilky Z
-    where Z.GroupDelivery <= 12012131 order by GroupDelivery ASC-- this must be identical to command before
+    where Z.GroupDelivery <= 12012131 order by GroupDelivery ASC-- ASC/DESC must be identical to command before
     ;
