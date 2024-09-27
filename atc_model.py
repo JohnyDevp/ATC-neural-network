@@ -28,4 +28,15 @@ class BaseNN(nn.Module):
         x = self.fc5(x)
         return x
 
+
+class BetterNN(nn.Module):
+    """
+    This is a better neural network model using feature vector
+    """
+    def __init__(self):
+        super(BetterNN, self).__init__()
+        
+        
+    def forward(self, x):
+        return x
     
