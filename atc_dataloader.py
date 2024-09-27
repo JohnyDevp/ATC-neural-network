@@ -81,3 +81,60 @@ class ATCDataset(Dataset):
         input_vector = torch.tensor(self.vectors.iloc[idx], dtype=torch.float32)  # Convert input vector to tensor
         output_vector = torch.tensor(self.result_vector[gd], dtype=torch.float32)  # Convert result vector to tensor
         return gd, input_vector, output_vector
+
+def create_feature_vector(input):
+    vector = input['Vector']
+    
+    
+class ATCDataset_v2(Dataset):
+    
+    def __init__(self, in_data_path, out_data_path):
+        """
+        Args:
+            data_path (str): path to the data in csv format
+        """
+        self.df = pd.read_csv(
+            in_data_path,
+            delimiter=",",
+            header=0
+            )
+        self.out_df = pd.read_csv(
+            out_data_path,
+            delimiter=",",
+            header=0
+            )
+        
+        # build OUTPUT DATA for the loss function
+        # ========================================
+        # labels for vector of the ouput boxes 
+        labels = [
+            "OM0000", "OM0001", "OM0002", "OM0003", "OM0004", "OM0005", "OM0006", "OM0007", 
+            "OM0008", "OM0009", "OM0010", "PAL01", "PAL02", "PAL03", "PAL04", "PAL05", "PAL06", 
+            "PAL07"
+        ]
+
+        # result vector contains number of occurences of each box for each group of items
+        result_vector = {}
+        for group in self.out_df['GroupDelivery'].unique():
+            result_vector[group] = np.zeros((labels.__len__()))
+            
+        for _, row in self.out_df.iterrows():
+            cartonName = row['UsedCarton'].strip().upper()
+            result_vector[row['GroupDelivery']][labels.index(cartonName)] += 1
+        self.result_vector = result_vector
+        
+        # build INPUT DATA 
+        # ========================================
+        
+        # Apply the function to each GroupDelivery
+        def vectorize(group):
+            return group[['X', 'Y', 'Z', 'Weight', 'Qty']].values.flatten().tolist()
+        
+        grouped = self.df.groupby('GroupDelivery').apply(group, include_groups=False).reset_index()
+
+        # Rename columns
+        grouped.columns = ['GroupDelivery', 'Vector']
+        
+        # store vectors and group delivery
+        self.vectors = grouped.Vector
+        self.groupDelivery = grouped.GroupDelivery
