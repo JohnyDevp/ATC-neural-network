@@ -1,3 +1,4 @@
 notes.md
-models/*
+models/*.pth
 __pycache__/*
+*.pth
