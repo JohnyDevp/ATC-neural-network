@@ -31,12 +31,50 @@ class BaseNN(nn.Module):
 
 class BetterNN(nn.Module):
     """
-    This is a better neural network model using feature vector
+    This is a better neural network model ready to use feature vector
     """
-    def __init__(self):
+    def __init__(self, input_size=38, output_size=18):
         super(BetterNN, self).__init__()
         
+        # use relu as activation function, cause any other is not suitable for this task
+        self.activation = nn.ReLU()
         
+        # Conv1d layer
+        self.conv1d = nn.Conv1d(in_channels=1, out_channels=1, kernel_size=3)
+        
+        # Calculate the size after the Conv1d layer
+        # Assuming input_size is the length of the sequence and the input is of shape (batch_size, 1, input_size)
+        conv_output_size = (input_size - self.conv1d.kernel_size + 1)  # since kernel_size=3 and stride=1, padding=0
+        
+        # First linear layer should take conv_output_size as input
+        self.fc1 = nn.Linear(conv_output_size, 200)
+        
+        # the hidden part of linear layers
+        self.fc2 = nn.Linear(200, 500)  # Change input size according to fc1 output
+        self.fc3 = nn.Linear(500, 500)
+        self.fc4 = nn.Linear(500, 300)
+        self.fc5 = nn.Linear(300, 100)
+        
+        # The output layer for classification
+        self.fc6 = nn.Linear(100, output_size)
+
     def forward(self, x):
+        # Reshape x to fit Conv1d input requirements
+        x = x.unsqueeze(1)  # Add a channel dimension: (batch_size, 1, input_size)
+        x = self.conv1d(x)  # Apply Conv1d
+        x = x.squeeze(1)     # Remove the channel dimension after conv: (batch_size, conv_output_size)
+        
+        x = self.fc1(x)
+        x = self.activation(x)
+        x = self.fc2(x)
+        x = self.activation(x)
+        x = self.fc3(x)
+        x = self.activation(x)
+        x = self.fc4(x)
+        x = self.activation(x)
+        x = self.fc5(x)
+        x = self.activation(x)
+        x = self.fc6(x)
         return x
+
     
