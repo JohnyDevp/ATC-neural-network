@@ -104,10 +104,10 @@ class BetterNN_hard(nn.Module):
         
         self.conv1d_kernel5 = nn.Conv1d(in_channels=1, out_channels=1, kernel_size=5)
         
-        conv_output_size = (2000 - 5 + 1)   # since linear before convolutional has output of 2000,
+        conv1d_ker5_output_size = (1991 - 5 + 1)   # since linear before convolutional has output of 1991,
                                             # kernel_size=5 and stride=1, padding=0
         
-        self.fc6 = nn.Linear(conv_output_size, 1000)
+        self.fc6 = nn.Linear(conv1d_ker5_output_size, 1000)
         self.fc7 = nn.Linear(1000, 500)
         
         # The output layer for classification
@@ -140,4 +140,3 @@ class BetterNN_hard(nn.Module):
         x = self.activation(x)
         
         return x
-   
