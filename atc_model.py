@@ -77,4 +77,67 @@ class BetterNN(nn.Module):
         x = self.fc6(x)
         return x
 
-    
+class BetterNN_hard(nn.Module):
+    """
+    This is a better neural network model ready to use feature vector
+    """
+    def __init__(self, input_size=40, output_size=18):
+        super(BetterNN_hard, self).__init__()
+        
+        # use relu as activation function, cause any other is not suitable for this task
+        self.activation = nn.ReLU()
+        
+        # First linear layer should take conv_output_size as input
+        self.fc1 = nn.Linear(input_size, 200)
+        
+        # the hidden part of linear layers
+        self.fc2 = nn.Linear(200, 500)  # Change input size according to fc1 output
+        self.fc3 = nn.Linear(500, 1000)
+        self.fc4 = nn.Linear(1000, 2000)
+        self.fc5 = nn.Linear(2000, 2000)
+        
+        # Conv1d layer
+        self.conv1d_kernel10 = nn.Conv1d(in_channels=1, out_channels=1, kernel_size=10)
+        
+        # Calculate the size after the Conv1d layer
+        # Assuming input_size is the length of the sequence and the input is of shape (batch_size, 1, input_size)
+        
+        self.conv1d_kernel5 = nn.Conv1d(in_channels=1, out_channels=1, kernel_size=5)
+        
+        conv_output_size = (2000 - 5 + 1)   # since linear before convolutional has output of 2000,
+                                            # kernel_size=5 and stride=1, padding=0
+        
+        self.fc6 = nn.Linear(conv_output_size, 1000)
+        self.fc7 = nn.Linear(1000, 500)
+        
+        # The output layer for classification
+        self.fc8 = nn.Linear(500, output_size)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.activation(x)
+        x = self.fc2(x)
+        x = self.activation(x)
+        x = self.fc3(x)
+        x = self.activation(x)
+        x = self.fc4(x)
+        x = self.activation(x)
+        x = self.fc5(x)
+        x = self.activation(x)
+        
+        x = x.unsqueeze(1)  # add a channel dimension: (batch_size, 1, input_size)
+        x = self.conv1d_kernel10(x)  # convolutional layer 1D, kernel size 10
+        x = self.activation(x)
+        x = self.conv1d_kernel5(x) # convolutional layer 1D, kernel size 5
+        x = self.activation(x)
+        x = x.squeeze(1)     # Remove the channel dimension after conv: (batch_size, conv_output_size)
+        
+        x = self.fc6(x)
+        x = self.activation(x)
+        x = self.fc7(x)
+        x = self.activation(x)
+        x = self.fc8(x)
+        x = self.activation(x)
+        
+        return x
+   
