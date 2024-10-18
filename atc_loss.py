@@ -35,16 +35,18 @@ class PredictionLoss_BOX_Wise(nn.Module):
         super().__init__(*args, **kwargs)
     
     def forward(self, pred, target):
-        # you have some boxes 1-18
+        # you have boxes 1-18
         # let decide the loss considering two params    -> total number of boxes - correct meaning loss 0, 
         #                                               -> number per box - correct meaning loss 0 for the current field
         
         loss = 0
         # calculate difference between each type of box 0
-        for i in range(len(pred)):
-            loss += self.mse(pred[i], target[i])
+        loss += self.mse(pred, target)
         
         # add the loss of the total number of boxes
         loss += torch.abs(pred.sum() - target.sum())                      
+        
+        # plus the loss is more penalized if no element is equal to one
+        loss += (torch.max(pred) < 1)
         
         return loss
