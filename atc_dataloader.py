@@ -78,14 +78,14 @@ class ATCDataset(Dataset):
 
     def __getitem__(self, idx):
         gd = self.groupDelivery.iloc[idx]
-        # Ensure the vectors are returned as numpy arrays
+        # Ensure the vectors are returned as torch arrays
         input_vector = torch.tensor(self.vectors.iloc[idx], dtype=torch.float32)  # Convert input vector to tensor
         output_vector = torch.tensor(self.result_vector[gd], dtype=torch.float32)  # Convert result vector to tensor
         return gd, input_vector, output_vector
 
 # this is create feature vector
 # it creates a single vector, that describes most the group, from the group of items
-def create_feature_vector(group):
+def create_feature_vector(group): 
     """
     Create a feature vector for a group of items
     Args:

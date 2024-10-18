@@ -33,7 +33,7 @@ class BetterNN(nn.Module):
     """
     This is a better neural network model ready to use feature vector
     """
-    def __init__(self, input_size=38, output_size=18):
+    def __init__(self, input_size=40, output_size=18):
         super(BetterNN, self).__init__()
         
         # use relu as activation function, cause any other is not suitable for this task
@@ -44,7 +44,7 @@ class BetterNN(nn.Module):
         
         # Calculate the size after the Conv1d layer
         # Assuming input_size is the length of the sequence and the input is of shape (batch_size, 1, input_size)
-        conv_output_size = (input_size - self.conv1d.kernel_size + 1)  # since kernel_size=3 and stride=1, padding=0
+        conv_output_size = (input_size - 3 + 1)  # since kernel_size=3 and stride=1, padding=0
         
         # First linear layer should take conv_output_size as input
         self.fc1 = nn.Linear(conv_output_size, 200)
@@ -60,7 +60,7 @@ class BetterNN(nn.Module):
 
     def forward(self, x):
         # Reshape x to fit Conv1d input requirements
-        x = x.unsqueeze(1)  # Add a channel dimension: (batch_size, 1, input_size)
+        x = x.unsqueeze(1)  # remove a channel dimension: (batch_size, 1, input_size)
         x = self.conv1d(x)  # Apply Conv1d
         x = x.squeeze(1)     # Remove the channel dimension after conv: (batch_size, conv_output_size)
         
